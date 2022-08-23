@@ -8,7 +8,7 @@ ui <- fluidPage(
     br(),
     h3("Step 1: fill in questionnaire"),
     br(),
-    p("On a scale from 1-9, where 1 is 'strongly disagree and 9 is strongly agree, please answer the following:"),
+    p("On a scale from 1-9, where 1 is 'strongly disagree' and 9 is 'strongly agree', please answer the following:"),
 
     # Input: Slider example ----
     sliderInput(inputId = "carbon_pricing_belief",
