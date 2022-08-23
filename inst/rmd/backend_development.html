@@ -366,17 +366,47 @@ pre code {
 </div>
 
 
+<div id="read-in-eiti-production-data" class="section level2">
+<h2>Read in EITI production data</h2>
+<p>The function <code>read_eiti_production()</code> reads in EIT
+production data from the API for a given country and year.</p>
+<pre class="r"><code>library(carpentr)
+
+sn17 &lt;- read_eiti_production(&quot;SN&quot;,2017)
+sn17</code></pre>
+<pre><code>##         label       value unit
+## 1 Oil, volume        0.00  Sm3
+## 2 Gas, volume 16728742.73  Sm3</code></pre>
+</div>
+<div id="estimate-carbon-emissions-from-oil-and-gas-volume" class="section level2">
+<h2>Estimate carbon emissions from oil and gas volume</h2>
+<p><code>oilgas_to_co2()</code> estimates CO2 emissions in tonnes for a
+given amount of oild and gas production in sm3. The conversion factors
+in here are currently very preliminary and need to be checked.</p>
+<pre class="r"><code>sn17_co2 &lt;- oilgas_to_co2(sn17)
+sn17_co2</code></pre>
+<pre><code>## [1] 167287.4</code></pre>
+</div>
 <div id="estimate-carbon-revenue-from-carbon-emmission-and-carbon-price" class="section level2">
 <h2>Estimate carbon revenue from carbon emmission and carbon price</h2>
-<p>The function get_revenue estimates the revenue from carbon emissions
-from carbon price. At present this uses an overly simple approach of
-multiplying the carbon price by the emissions, then reducing by 10% to
-account for reductions in carbon emissions (see Table 2 in <a href>this</a> IMF report).</p>
-<p>Here, we estimate revenue for a carbon price of $35 per metric tonne,
-assuming 1m tonnes of carbon dioxide in emissions.</p>
-<pre class="r"><code>library(carpentr)
-get_revenue(35,1000000)</code></pre>
-<pre><code>## [1] 31500000</code></pre>
+<p>The function <code>get_revenue()</code> estimates the revenue from
+carbon emissions from carbon price. At present this uses an overly
+simple approach of multiplying the carbon price by the emissions, then
+reducing by 10% to account for reductions in carbon emissions (see Table
+2 in <a href="https://www.imf.org/external/np/g20/pdf/110411b.pdf">this</a> IMF
+report).</p>
+<p>Here, we estimate revenue for a carbon price of $35 per metric tonne
+for the Senegal 2017 CO2 emissions estimate</p>
+<pre class="r"><code>get_revenue(35,sn17_co2)</code></pre>
+<pre><code>## [1] 5269554</code></pre>
+</div>
+<div id="get-revenue-directly-for-a-given-country-and-year" class="section level2">
+<h2>Get revenue directly for a given country and year</h2>
+<p>We can use the wrapper function <code>eiti_oilgas_revenue()</code> to
+estimate carbon pricing revenues directly for a goven country and
+year</p>
+<pre class="r"><code>eiti_oilgas_revenue(&quot;SN&quot;,2017,35)</code></pre>
+<pre><code>## [1] 5269554</code></pre>
 </div>
 
 
