@@ -1,0 +1,19 @@
+---
+title: "Backend development"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+```
+
+## Estimate carbon revenue from carbon emmission and carbon price
+
+The function get_revenue estimates the revenue from carbon emissions from carbon price. At present this uses an overly simple approach of multiplying the carbon price by the emissions, then reducing by 10% to account for reductions in carbon emissions (see Table 2 in [this]() IMF report).
+
+Here, we estimate revenue for a carbon price of $35 per metric tonne, assuming 1m tonnes of carbon dioxide in emissions.
+
+```{r revenue}
+library(carpentr)
+get_revenue(35,1000000)
+```

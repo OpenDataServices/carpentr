@@ -1,0 +1,13 @@
+Package: carpentr
+Type: Package
+Title: Understanding The Impacts of Carbon Pricing For The Energy Transition
+Version: 0.0.1
+Author: Open Data Services
+Maintainer: Lewis Spurgin <lewis.spurgin@opendataservices.coop>
+Description: R functions and Shiny apps for simulating carbon revenue and spending options from carbon pricing scenarios
+Depends:
+  shiny
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.0
