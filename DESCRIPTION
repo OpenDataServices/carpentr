@@ -6,7 +6,8 @@ Author: Open Data Services
 Maintainer: Lewis Spurgin <lewis.spurgin@opendataservices.coop>
 Description: R functions and Shiny apps for simulating carbon revenue and spending options from carbon pricing scenarios
 Depends:
-  shiny
+  shiny,
+  bslib
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

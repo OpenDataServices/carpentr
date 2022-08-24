@@ -34,19 +34,17 @@ sn17_co2
 
 The function `get_revenue()` estimates the revenue from carbon emissions from carbon price. At present this uses an overly simple approach of multiplying the carbon price by the emissions, then reducing by 10% to account for reductions in carbon emissions (see Table 2 in [this](https://www.imf.org/external/np/g20/pdf/110411b.pdf) IMF report).
 
-Here, we estimate revenue for a carbon price of $35 per metric tonne for the Senegal 2017 CO2 emissions estimate
+Here, we estimate revenue for a carbon price of $25 per metric tonne for the Senegal 2017 CO2 emissions estimate
 
 ```{r revenue}
-get_revenue(35,sn17_co2)
+get_revenue(25,sn17_co2)
 ```
 
 ## Get revenue directly for a given country and year
 
-We can use the wrapper function `eiti_oilgas_revenue()` to estimate carbon pricing revenues directly for a goven country and year
+We can use the wrapper function `eiti_oilgas_revenue()` to estimate carbon pricing revenues directly for a given country and year, in millions of dollars
 
 ```{r wrapper}
-eiti_oilgas_revenue("SN",2017,35)
+eiti_oilgas_revenue("SN",2017,25)/1e06
 ```
-
-
 
