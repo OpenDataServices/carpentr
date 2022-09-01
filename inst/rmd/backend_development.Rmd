@@ -80,3 +80,10 @@ indicator_survey_matrix[,"I trust my government to spend money generated from ca
 saveRDS(indicator_survey_matrix,file = '../../data-raw/indicator_survey_matrix.RDS')
 
 ```
+
+## World bank data
+
+```{r imf}
+dd <- read_csv('../../data-raw/API_SEN_DS2_en_csv_v2_4347091.csv',skip = 3)
+```
+
