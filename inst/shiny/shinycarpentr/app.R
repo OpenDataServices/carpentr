@@ -2,34 +2,40 @@ library(shiny)
 library(bslib)
 library(carpentr)
 
+indicator_survey_matrix <- readRDS('../../../data-raw/indicator_survey_matrix.RDS')
+
+qs <- colnames(indicator_survey_matrix)
+inds <- rownames(indicator_survey_matrix)
+euclidean <- function(a, b) sqrt(sum((a - b)^2))
+
 ui <- fluidPage(
     theme = "bootstrap.css",
     titlePanel("Carbon pricing revenue estimator (prototype)"),
     br(),
     mainPanel(
-    h5("Not currently operational. For development purposes only.",),
+    h5("Not currently operational. For development purposes only."),
     br(),
     h3("Step 1: fill in questionnaire"),
     br(),
     h4("On a scale from 1-9, where 1 is 'strongly disagree' and 9 is 'strongly agree', please answer the following:"),
     br(),
     # Input: Slider example ----
-    sliderInput(inputId = "carbon_pricing_belief",
-                label = h5("I believe that carbon pricing is good for my local economy"),
+    sliderInput(inputId = 'q1',
+                label = h5(qs[1]),
                 min = 1,
                 max = 9,
                 value = 1,
                 width = '100%'
     ),
-    sliderInput(inputId = "gov_trust",
-                label = h5("I trust my government to spend money generated from carbon taxes on local infrastructure"),
+    sliderInput(inputId = 'q2',
+                label = h5(qs[2]),
                 min = 1,
                 max = 9,
                 value = 1,
                 width = '100%'
     ),
-    sliderInput(inputId = "personal_concern",
-                label = h5("I am concerned about the impacts of carbon pricing on myself, my friends, or my family"),
+    sliderInput(inputId = 'q3',
+                label = h5(qs[3]),
                 min = 1,
                 max = 9,
                 value = 1,
@@ -48,7 +54,10 @@ ui <- fluidPage(
     br(),
     h4(htmlOutput("carbonpricetxt")),
     br(),
-    h4(htmlOutput("usrtxt")),
+    h4("Based on your responses, this carbon pricing data could be spent on:"),
+    h5(htmlOutput("ind1")),
+    h5(htmlOutput("ind2")),
+    h5(htmlOutput("ind3")),
     br(),
     width = 12
     )
@@ -63,18 +72,21 @@ server <- function(input, output, session) {
                " USD</b> generated from carbon pricing at your selected price")
     })
 
-    output$usrtxt <- renderText({
-        carbon_pricing_belief <- ifelse(input$carbon_pricing_belief >5,"high","low")
-        gov_trust <- ifelse(input$gov_trust >5,"high","low")
-        personal_concern <- ifelse(input$personal_concern >5,"high","low")
+    dist <- reactive({
+        inputs <- c(input$q1,input$q2,input$q3)
+        apply(indicator_survey_matrix,1,euclidean,inputs)
+    })
 
-        paste("You have <b>",
-              carbon_pricing_belief,
-              "</b>belief in carbon pricing and <b>",
-              gov_trust,
-              "</b>trust in government and<b>",
-              personal_concern,
-              "</b>personal concern about carbon pricing")
+    output$ind1 <- renderText({
+        inds[which(order(dist()) == 1)]
+    })
+
+    output$ind2 <- renderText({
+        inds[which(order(dist()) == 2)]
+    })
+
+    output$ind3 <- renderText({
+        inds[which(order(dist()) == 3)]
     })
 }
 

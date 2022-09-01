@@ -48,3 +48,35 @@ We can use the wrapper function `eiti_oilgas_revenue()` to estimate carbon prici
 eiti_oilgas_revenue("SN",2017,25)/1e06
 ```
 
+## Create a dummy set of survey questions and indicators
+
+```{r indicators}
+qs <- c(
+  "I believe that global warming is a threat to society",
+  "I believe that carbon pricing is good for my local economy",
+  "I trust my government to spend money generated from carbon taxes on local infrastructure"
+)
+
+inds <- c(
+  "Personal tax rebate",
+  "New hospitals",
+  "Investment in local economy",
+  "Local jobs",
+  "Reductions in income tax",
+  "New schools",
+  "Investment in public transport"
+  )
+
+indicator_survey_matrix <- matrix(NA,length(inds),length(qs))
+
+rownames(indicator_survey_matrix) <- inds
+colnames(indicator_survey_matrix) <- qs
+
+#Add expected scores
+indicator_survey_matrix[,"I believe that global warming is a threat to society"] <- c(1,9,7,7,1,9,9)
+indicator_survey_matrix[,"I believe that carbon pricing is good for my local economy"] <- c(1,7,9,9,1,7,8)
+indicator_survey_matrix[,"I trust my government to spend money generated from carbon taxes on local infrastructure"] <- c(1,9,9,7,1,7,9)
+
+saveRDS(indicator_survey_matrix,file = '../../data-raw/indicator_survey_matrix.RDS')
+
+```
