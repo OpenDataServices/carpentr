@@ -17,3 +17,24 @@ shinycarpentr <- function() {
 
   shiny::runApp(appDir, display.mode = "normal")
 }
+
+
+#' Calculate Euclidean distance
+#'
+#' @description Calculate Euclidean distance
+#'
+#' @param a A numeric vector
+#' @param b A numeric vector
+#' @return A numeric Euclidean distance
+#' @export
+#'
+#' @examples
+#'
+#' x <- c(4,5,7)
+#' y <- c(9,12,3)
+#' euclidean(x,y)
+
+euclidean <- function(a, b){
+  out <- sqrt(sum((a - b)^2))
+  return(out)
+}
