@@ -85,5 +85,16 @@ saveRDS(indicator_survey_matrix,file = '../../data-raw/indicator_survey_matrix.R
 
 ```{r imf}
 dd <- read_csv('../../data-raw/API_SEN_DS2_en_csv_v2_4347091.csv',skip = 3)
+
+#Get all indicators with a mention of US dollars
+
+dd$`Indicator Name`[grep('US\\$',dd$`Indicator Name`,ignore.case = TRUE)]
+```
+Estimate total health spending in Senegal in 2017
+
+```{r senhealth}
+filter(dd,`Indicator Name` == "Current health expenditure per capita (current US$)") %>%
+  pull(`2017`)*filter(dd,`Indicator Name` == "Population, total") %>%
+  pull(`2017`)
 ```
 
