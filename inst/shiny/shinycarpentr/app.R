@@ -6,7 +6,6 @@ indicator_survey_matrix <- readRDS('../../../data-raw/indicator_survey_matrix.RD
 
 qs <- colnames(indicator_survey_matrix)
 inds <- rownames(indicator_survey_matrix)
-euclidean <- function(a, b) sqrt(sum((a - b)^2))
 
 ui <- fluidPage(
     theme = "bootstrap.css",
