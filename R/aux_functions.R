@@ -44,9 +44,8 @@ euclidean <- function(a, b){
 #'
 #' @description Get world bank indicators, and transform values in USD per capita and in %GDP to totals in USD
 #'
-#' @param world_bank_raw Raw world bank development indicator data
+#' @param data_dor directory containing raw world bank and indicator data. Named world_bank_raw.csv and indicators.csv, respectively
 #' @param year The year to get the data from
-#' @param indicator_set a vector of indicator codes to filter
 #' @return A dataframe of cleaned indicators
 #' @importFrom dplyr select filter mutate pull
 #' @importFrom magrittr %>%
@@ -54,21 +53,16 @@ euclidean <- function(a, b){
 #'
 #' @examples
 #'
-#' initial_indicator_set <- c(
-#' 'GC.TAX.TOTL.GD.ZS',
-#' 'MS.MIL.XPND.CD',
-#' 'NY.ADJ.AEDU.CD',
-#' 'SH.XPD.CHEX.PC.CD',
-#' 'ST.INT.XPND.CD',
-#' 'NE.CON.GOVT.CD'
-#' )
 #'
-#' get_wb_indicators(world_bank_raw,2017,initial_indicator_set)
+#' get_wb_indicators(2017)
 #'
 #'
 
-get_wb_indicators <- function(world_bank_raw,year,initial_indicator_set)
+get_wb_indicators <- function(year,data_dir = 'data-raw')
 {
+  initial_indicator_set = read_csv(paste(data_dir,'indicators.csv',sep = '/'))$code
+  world_bank_raw = read_csv(paste(data_dir,'world_bank_raw.csv',sep = '/'),skip = 3)
+
   world_bank_raw[,"value"] <- world_bank_raw[,as.character(year)]
 
   selected_indicators <- world_bank_raw %>%
@@ -93,5 +87,35 @@ get_wb_indicators <- function(world_bank_raw,year,initial_indicator_set)
 
   return(cleaned_indicators)
 
+}
+
+
+#' Update indicator-question template
+#'
+#' @description Write a blank template of expected scores for a given set of indicators and questions
+#'
+#' @param dir directory containing the files indicators.csv and questions.csv
+#' @return A csv file 'indicator_question_template.csv' written to data-raw
+#' @importFrom dplyr mutate
+#' @importFrom magrittr %>%
+#' @importFrom tidyr expand_grid
+#' @export
+#'
+#' @examples
+#'
+#'
+#' update_indicator_question_template()
+#'
+
+update_indicator_question_template <- function(dir = 'data-raw')
+{
+  indicators <- read_csv(paste(dir,'indicators.csv',sep = '/'))
+  questions <- read_csv(paste(dir,'questions.csv',sep = '/'))
+
+  indicator_survey_matrix <- matrix(NA,nrow = nrow(indicators),ncol = nrow(questions))
+  rownames(indicator_survey_matrix) <- str_remove_all(indicators$name,',')
+  colnames(indicator_survey_matrix) <- str_remove_all(questions$name,',')
+
+  write.csv(indicator_survey_matrix,paste(dir,'indicators_survey_template.csv',sep = '/'), na = '',quote = FALSE)
 }
 

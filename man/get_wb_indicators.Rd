@@ -4,14 +4,12 @@
 \alias{get_wb_indicators}
 \title{Get world bank indicators}
 \usage{
-get_wb_indicators(world_bank_raw, year, initial_indicator_set)
+get_wb_indicators(year, data_dir = "data-raw")
 }
 \arguments{
-\item{world_bank_raw}{Raw world bank development indicator data}
-
 \item{year}{The year to get the data from}
 
-\item{indicator_set}{a vector of indicator codes to filter}
+\item{data_dor}{directory containing raw world bank and indicator data. Named world_bank_raw.csv and indicators.csv, respectively}
 }
 \value{
 A dataframe of cleaned indicators
@@ -21,16 +19,8 @@ Get world bank indicators, and transform values in USD per capita and in %GDP to
 }
 \examples{
 
-initial_indicator_set <- c(
-'GC.TAX.TOTL.GD.ZS',
-'MS.MIL.XPND.CD',
-'NY.ADJ.AEDU.CD',
-'SH.XPD.CHEX.PC.CD',
-'ST.INT.XPND.CD',
-'NE.CON.GOVT.CD'
-)
 
-get_wb_indicators(world_bank_raw,2017,initial_indicator_set)
+get_wb_indicators(2017)
 
 
 }

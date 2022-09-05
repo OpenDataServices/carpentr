@@ -5,6 +5,8 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+library(carpentr)
+library(tidyverse)
 ```
 
 ## Read in EITI production data
@@ -12,7 +14,6 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 The function `read_eiti_production()` reads in EIT production data from the API for a given country and year.
 
 ```{r read_eiti_production}
-library(carpentr)
 
 sn17 <- read_eiti_production("SN",2017)
 sn17
@@ -48,48 +49,15 @@ We can use the wrapper function `eiti_oilgas_revenue()` to estimate carbon prici
 eiti_oilgas_revenue("SN",2017,25)/1e06
 ```
 
-## Create a dummy set of survey questions and indicators
-
-```{r indicators}
-qs <- c(
-  "I believe that global warming is a threat to society",
-  "I believe that carbon pricing is good for my local economy",
-  "I trust my government to spend money generated from carbon taxes on local infrastructure"
-)
-
-inds <- c(
-  "Personal tax rebate",
-  "New hospitals",
-  "Investment in local economy",
-  "Local jobs",
-  "Reductions in income tax",
-  "New schools",
-  "Investment in public transport"
-  )
-
-indicator_survey_matrix <- matrix(NA,length(inds),length(qs))
-
-rownames(indicator_survey_matrix) <- inds
-colnames(indicator_survey_matrix) <- qs
-
-#Add expected scores
-indicator_survey_matrix[,"I believe that global warming is a threat to society"] <- c(1,9,7,7,1,9,9)
-indicator_survey_matrix[,"I believe that carbon pricing is good for my local economy"] <- c(1,7,9,9,1,7,8)
-indicator_survey_matrix[,"I trust my government to spend money generated from carbon taxes on local infrastructure"] <- c(1,9,9,7,1,7,9)
-
-saveRDS(indicator_survey_matrix,file = '../../data-raw/indicator_survey_matrix.RDS')
-
-```
 
 ## World bank data
 
 ```{r world_bank_read}
 world_bank_raw <- read_csv('../../data-raw/API_SEN_DS2_en_csv_v2_4347091.csv',skip = 3)
 ```
-Estimate total health spending in Senegal in 2017
+Create indicator list
 
-```{r world_bank_indicators}
-
+```{r create_indicator_list}
 # world_bank_raw %>%
 #   filter(str_detect(`Indicator Name`,"expenditure|revenue"),
 #          !is.na(`2017`)) %>%
@@ -105,7 +73,50 @@ initial_indicator_set <- c(
   'NE.CON.GOVT.CD'
 )
 
-get_wb_indicators(world_bank_raw,2017,initial_indicator_set)
+indicators <- filter(world_bank_raw,`Indicator Code` %in% initial_indicator_set) %>%
+  select(code = `Indicator Code`,
+         name = `Indicator Name`)
+
+write_csv(indicators,'../../data-raw/indicators.csv')
 
 ```
 
+Create question list
+
+```{r create_question_list}
+name <- c(
+  "I believe that global warming is a threat to society",
+  "I believe that carbon pricing is good for my local economy",
+  "I trust my government to spend money generated from carbon taxes on local infrastructure"
+)
+
+code <- paste0('Q',c(1:length(name)))
+
+questions <- tibble(code,name)
+
+write_csv(questions,'../../data-raw/questions.csv')
+
+
+```
+
+
+```{r indicator_questions_template}
+
+update_indicator_question_template('../../data-raw')
+
+```
+
+Fill in the template, then read back in to R
+
+```{r indicators_questions}
+
+
+indicator_survey_matrix<- read.csv('../../data-raw/indicators_survey_matrix.csv',row.names = 1,check.names = FALSE)
+indicator_survey_matrix <- as.matrix(indicator_survey_matrix)
+indicator_survey_matrix
+```
+```{r get indicators}
+
+indicator_values <- get_wb_indicators(2017,data_dir = '../../data-raw')
+indicator_values
+```

@@ -2,7 +2,10 @@ library(shiny)
 library(bslib)
 library(carpentr)
 
-indicator_survey_matrix <- readRDS('../../../data-raw/indicator_survey_matrix.RDS')
+indicator_survey_matrix<- read.csv('../../../data-raw/indicators_survey_matrix.csv',row.names = 1,check.names = FALSE)
+indicator_survey_matrix <- as.matrix(indicator_survey_matrix)
+indicator_values <- get_wb_indicators(2017,data_dir = '../../../data-raw')
+
 
 qs <- colnames(indicator_survey_matrix)
 inds <- rownames(indicator_survey_matrix)
@@ -64,10 +67,13 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
 
+    rev <- reactive({round(eiti_oilgas_revenue("SN",
+                                               2017,
+                                               as.numeric(input$carbon_price)))})
+
     output$carbonpricetxt <- renderText({
-        rev <- round(eiti_oilgas_revenue("SN",2017,as.numeric(input$carbon_price)))
         paste0("Based on EITI data from Senegal in 2017, there would be <b>$",
-               rev,
+               rev(),
                " USD</b> generated from carbon pricing at your selected price")
     })
 
@@ -76,17 +82,25 @@ server <- function(input, output, session) {
         apply(indicator_survey_matrix,1,euclidean,inputs)
     })
 
+
     output$ind1 <- renderText({
-        inds[which(order(dist()) == 1)]
+        nam <- inds[which(order(dist()) == 1)]
+        val <- indicator_values[indicator_values$name == nam,'value']
+        paste0(nam," ",
+              round(rev()/val*100),"%")
     })
 
     output$ind2 <- renderText({
-        inds[which(order(dist()) == 2)]
-    })
+        nam <- inds[which(order(dist()) == 2)]
+        val <- indicator_values[indicator_values$name == nam,'value']
+        paste0(nam," ",
+               round(rev()/val*100),"%")    })
 
     output$ind3 <- renderText({
-        inds[which(order(dist()) == 3)]
-    })
+        nam <- inds[which(order(dist()) == 3)]
+        val <- indicator_values[indicator_values$name == nam,'value']
+        paste0(nam," ",
+               round(rev()/val*100),"%")    })
 }
 
 shinyApp(ui, server)
