@@ -39,59 +39,32 @@ euclidean <- function(a, b){
   return(out)
 }
 
-
-#' Get world bank indicators
+#' Update indicator-question template
 #'
-#' @description Get world bank indicators, and transform values in USD per capita and in %GDP to totals in USD
+#' @description Write a blank template of expected scores for a given set of indicators and questions
 #'
-#' @param world_bank_raw Raw world bank development indicator data
-#' @param year The year to get the data from
-#' @param indicator_set a vector of indicator codes to filter
-#' @return A dataframe of cleaned indicators
-#' @importFrom dplyr select filter mutate pull
+#' @param dir directory containing the files indicators.csv and questions.csv
+#' @return A csv file 'indicator_question_template.csv' written to data-raw
+#' @importFrom dplyr mutate
 #' @importFrom magrittr %>%
+#' @importFrom tidyr expand_grid
 #' @export
 #'
 #' @examples
 #'
-#' initial_indicator_set <- c(
-#' 'GC.TAX.TOTL.GD.ZS',
-#' 'MS.MIL.XPND.CD',
-#' 'NY.ADJ.AEDU.CD',
-#' 'SH.XPD.CHEX.PC.CD',
-#' 'ST.INT.XPND.CD',
-#' 'NE.CON.GOVT.CD'
-#' )
 #'
-#' get_wb_indicators(world_bank_raw,2017,initial_indicator_set)
-#'
+#' update_indicator_question_template()
 #'
 
-get_wb_indicators <- function(world_bank_raw,year,initial_indicator_set)
+update_indicator_question_template <- function(dir = 'data-raw')
 {
-  world_bank_raw[,"value"] <- world_bank_raw[,as.character(year)]
+  indicators <- read_csv(paste(dir,'indicators.csv',sep = '/'))
+  questions <- read_csv(paste(dir,'questions.csv',sep = '/'))
 
-  selected_indicators <- world_bank_raw %>%
-    select(code = `Indicator Code`,
-           name = `Indicator Name`,
-           value) %>%
-    filter(code %in% initial_indicator_set)
+  indicator_survey_matrix <- matrix(NA,nrow = nrow(indicators),ncol = nrow(questions))
+  rownames(indicator_survey_matrix) <- str_remove_all(indicators$name,',')
+  colnames(indicator_survey_matrix) <- str_remove_all(questions$name,',')
 
-  pop <- world_bank_raw %>%
-    filter(`Indicator Code` == 'SP.POP.TOTL') %>%
-    pull(value)
-
-  gdp <- world_bank_raw %>%
-    filter(`Indicator Code` == 'NY.GDP.MKTP.CD') %>%
-    pull(value)
-
-  cleaned_indicators <- selected_indicators %>%
-    mutate(value = case_when(str_detect(code,'.ZS') ~ (value/100)*gdp,
-                             TRUE ~ value)) %>%
-    mutate(value = case_when(str_detect(code,'.PC.') ~ (value)*pop,
-                             TRUE ~ value))
-
-  return(cleaned_indicators)
-
+  write.csv(indicator_survey_matrix,paste(dir,'indicators_survey_template.csv',sep = '/'), na = '',quote = FALSE)
 }
 
