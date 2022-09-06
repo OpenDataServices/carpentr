@@ -53,7 +53,7 @@ eiti_oilgas_revenue("SN",2017,25)/1e06
 ## World bank data
 
 ```{r world_bank_read}
-world_bank_raw <- read_csv('../../data-raw/API_SEN_DS2_en_csv_v2_4347091.csv',skip = 3)
+world_bank_raw <- read_csv('../../data-raw/world_bank_raw.csv',skip = 3)
 ```
 Create indicator list
 
@@ -75,7 +75,8 @@ initial_indicator_set <- c(
 
 indicators <- filter(world_bank_raw,`Indicator Code` %in% initial_indicator_set) %>%
   select(code = `Indicator Code`,
-         name = `Indicator Name`)
+         name = `Indicator Name`) %>%
+  mutate(name = str_remove_all(name,','))
 
 write_csv(indicators,'../../data-raw/indicators.csv')
 
@@ -117,6 +118,15 @@ indicator_survey_matrix
 ```
 ```{r get indicators}
 
-indicator_values <- get_wb_indicators(2017,data_dir = '../../data-raw')
+indicator_values <- get_wb_indicators(c(2010:2017),data_dir = '../../data-raw')
 indicator_values
+```
+Plot an indicator
+
+```{r plot indicator}
+
+toplot <- filter(indicator_values,code == 'ST.INT.XPND.CD')
+
+plot_indicator(toplot,10000000,2017)
+
 ```

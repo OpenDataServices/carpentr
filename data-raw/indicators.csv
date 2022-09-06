@@ -1,5 +1,5 @@
 code,name
-ST.INT.XPND.CD,"International tourism, expenditures (current US$)"
+ST.INT.XPND.CD,International tourism expenditures (current US$)
 SH.XPD.CHEX.PC.CD,Current health expenditure per capita (current US$)
 MS.MIL.XPND.CD,Military expenditure (current USD)
 NE.CON.GOVT.CD,General government final consumption expenditure (current US$)

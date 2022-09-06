@@ -1,10 +1,12 @@
 library(shiny)
 library(bslib)
 library(carpentr)
+library(tidyverse)
 
 indicator_survey_matrix<- read.csv('../../../data-raw/indicators_survey_matrix.csv',row.names = 1,check.names = FALSE)
 indicator_survey_matrix <- as.matrix(indicator_survey_matrix)
-indicator_values <- get_wb_indicators(2017,data_dir = '../../../data-raw')
+indicator_values <- get_wb_indicators(2010:2017,data_dir = '../../../data-raw') %>%
+    mutate(value = value/1000000)
 
 
 qs <- colnames(indicator_survey_matrix)
@@ -46,9 +48,9 @@ ui <- fluidPage(
     br(),
     h5(radioButtons(inputId = "carbon_price",
                  label = h4("I'd like to see results for:"),
-                 choices = c("High carbon pricing" = 50,
-                   "Medium carbon pricing" = 35,
-                   "Low carbon pricing" = 20),
+                 choices = c("Low carbon pricing" = 10,
+                             "Medium carbon pricing" = 30,
+                             "High carbon pricing" = 50),
                  inline = TRUE,
                  width = "100%")),
     br(),
@@ -58,8 +60,11 @@ ui <- fluidPage(
     br(),
     h4("Based on your responses, this carbon pricing data could be spent on:"),
     h5(htmlOutput("ind1")),
+    plotOutput("p1"),
     h5(htmlOutput("ind2")),
+    plotOutput("p2"),
     h5(htmlOutput("ind3")),
+    plotOutput("p3"),
     br(),
     width = 12
     )
@@ -69,12 +74,12 @@ server <- function(input, output, session) {
 
     rev <- reactive({round(eiti_oilgas_revenue("SN",
                                                2017,
-                                               as.numeric(input$carbon_price)))})
+                                               as.numeric(input$carbon_price)/1000000))})
 
     output$carbonpricetxt <- renderText({
         paste0("Based on EITI data from Senegal in 2017, there would be <b>$",
                rev(),
-               " USD</b> generated from carbon pricing at your selected price")
+               " million USD</b> generated from carbon pricing at your selected price")
     })
 
     dist <- reactive({
@@ -84,23 +89,33 @@ server <- function(input, output, session) {
 
 
     output$ind1 <- renderText({
+    inds[which(order(dist()) == 1)]
+    })
+
+    output$p1 <- renderPlot({
         nam <- inds[which(order(dist()) == 1)]
-        val <- indicator_values[indicator_values$name == nam,'value']
-        paste0(nam," ",
-              round(rev()/val*100),"%")
+        toplot <- indicator_values[indicator_values$name == nam,]
+    plot_indicator(toplot,rev(),2017)
     })
 
     output$ind2 <- renderText({
+        inds[which(order(dist()) == 2)]
+        })
+    output$p2 <- renderPlot({
         nam <- inds[which(order(dist()) == 2)]
-        val <- indicator_values[indicator_values$name == nam,'value']
-        paste0(nam," ",
-               round(rev()/val*100),"%")    })
+        toplot <- indicator_values[indicator_values$name == nam,]
+        plot_indicator(toplot,rev(),2017)
+    })
+
 
     output$ind3 <- renderText({
+        inds[which(order(dist()) == 3)]
+        })
+    output$p3 <- renderPlot({
         nam <- inds[which(order(dist()) == 3)]
-        val <- indicator_values[indicator_values$name == nam,'value']
-        paste0(nam," ",
-               round(rev()/val*100),"%")    })
+        toplot <- indicator_values[indicator_values$name == nam,]
+        plot_indicator(toplot,rev(),2017)
+    })
 }
 
 shinyApp(ui, server)
