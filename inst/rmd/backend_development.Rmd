@@ -11,11 +11,11 @@ library(tidyverse)
 
 ## Read in EITI production data
 
-The function `read_eiti_production()` reads in EIT production data from the API for a given country and year.
+The function `read_eiti()` reads in EIT production data from the API for a given country and year.
 
 ```{r read_eiti_production}
 
-sn17 <- read_eiti_production("SN",2017)
+sn17 <- read_eiti("SN",2017,'production')
 sn17
 
 ```

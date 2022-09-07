@@ -12,11 +12,12 @@
 #'
 #' @examples
 #'
-#' eiti_oilgas_revenue("SN",2017,35)
+#' eiti_oilgas_carbon_revenue("SN",2017,35)
 
-eiti_oilgas_revenue <- function(country, year, carbonprice){
-  oilgas_production <- read_eiti_production(country = country,
-                                            year = year)
+eiti_oilgas_carbon_revenue <- function(country, year, carbonprice){
+  oilgas_production <- read_eiti(country = country,
+                                            year = year,
+                                 type = 'production')
   co2 <- oilgas_to_co2(oilgas_production)
   revenue <- get_revenue(co2,carbonprice)
   return(revenue)
