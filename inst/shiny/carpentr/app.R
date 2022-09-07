@@ -1,4 +1,5 @@
 library(shiny)
+library(shinyWidgets)
 library(bslib)
 library(carpentr)
 library(tidyverse)
@@ -13,6 +14,8 @@ qs <- colnames(indicator_survey_matrix)
 inds <- rownames(indicator_survey_matrix)
 
 ui <- fluidPage(title = "Carbon pricing and the energy transition",
+                tags$style(type = "text/css", "a{color: #044278;}"),
+                setSliderColor(rep('#696969',3),c(1,2,3)),
     #theme = "bootstrap.css",
     titlePanel(h1("Carbon pricing and the energy transition",style = "color:#cd2973")),
     mainPanel(
@@ -82,7 +85,7 @@ ui <- fluidPage(title = "Carbon pricing and the energy transition",
                      value = 'p4',
                      h5("About this app"),
                      HTML("<p>This app is a prototype and estimates of carbon revenue should be considered crude estimates at best. Source code and information about data sources is available on <a  href = 'https://github.com/OpenDataServices/carpentr'>Github</a>.</p>"),
-                     HTML("<p>Developed by <a href = 'https://opendataservices.coop/'>Open Data Services</a>, as part of the <a href = 'https://eiti.org/events/datathon-innovative-solutions-data-driven-energy-transition'>EITI Datathon 2022</a>.</p>"),
+                     HTML("<p>Developed by <a href = 'https://opendataservices.coop/'>Open Data Services</a>, as part of the <a href = 'https://eiti.org/events/datathon-innovative-solutions-data-driven-energy-transition'>EITI Datathon 2022</a>.</p>")
                      )
         )
     )
@@ -90,14 +93,24 @@ ui <- fluidPage(title = "Carbon pricing and the energy transition",
 
 server <- function(input, output, session) {
 
-    rev <- reactive({round(eiti_oilgas_revenue("SN",
+    carbonrev <- reactive({round(eiti_oilgas_carbon_revenue("SN",
                                                2017,
                                                as.numeric(input$carbon_price)/1000000))})
 
+    oilgasrev <- reactive({
+      read_eiti('SN',2017,'revenue') %>%
+        mutate(value = round(as.numeric(value)/1000000)) %>%
+        pull(value) %>%
+        sum()})
+
     output$carbonpricetxt <- renderText({
         paste0("Based on EITI data from Senegal in 2017, there would be <span style = 'color:#cd2973'>$",
-               rev(),
-               " million USD</span> generated from carbon pricing at your selected price")
+               carbonrev(),
+               " million USD</span> generated from carbon pricing at your selected price. This is <span style = 'color:#cd2973'>",
+               ifelse(carbonrev()<oilgasrev(),
+                      paste0(round(carbonrev()/oilgasrev()*100), '%</span> of'),
+                      paste0('$',carbonrev() - oilgasrev(),' million more</span> than')),
+               " the entire government revenue generated from the extractives industries.")
     })
 
     dist <- reactive({
@@ -118,7 +131,7 @@ server <- function(input, output, session) {
 
     output$p1 <- renderPlot({
         toplot <- indicator_values[indicator_values$name == userdata()$name[1],]
-        plot_indicator(toplot,rev(),2017)
+        plot_indicator(toplot,carbonrev(),2017)
     })
 
     output$ind2 <- renderText({
@@ -126,7 +139,7 @@ server <- function(input, output, session) {
     })
     output$p2 <- renderPlot({
         toplot <- indicator_values[indicator_values$name == userdata()$name[2],]
-        plot_indicator(toplot,rev(),2017)
+        plot_indicator(toplot,carbonrev(),2017)
     })
 
 
@@ -135,7 +148,7 @@ server <- function(input, output, session) {
       })
     output$p3 <- renderPlot({
         toplot <- indicator_values[indicator_values$name == userdata()$name[3],]
-        plot_indicator(toplot,rev(),2017)
+        plot_indicator(toplot,carbonrev(),2017)
     })
 
     output$resultsTab <- renderTable({
