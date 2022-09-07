@@ -55,7 +55,7 @@ p <- ggplot(indicator_data,aes(x = year, y = value))+
   theme(panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank(),
         legend.title = element_blank(),
-legend.position = 'top')+
+legend.position = 'right')+
   labs(x = '',y = 'Value (million USD)',color = 'type',linetype = 'type')+
   scale_color_manual(values = c('#cd2973','black'))+
   scale_linetype_manual(values = c(2,1))

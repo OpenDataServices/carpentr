@@ -66,7 +66,7 @@ ui <- fluidPage(title = "Carbon pricing and the energy transition",
                              br(),
                              h4(htmlOutput("carbonpricetxt")),
                              br(),
-                             plotOutput("plots",height = "200px"),
+                             plotOutput("plots",height = "600px"),
                              br()
                     ),
                     tabPanel(title = h4("3. Share"),
@@ -133,43 +133,8 @@ server <- function(input, output, session) {
       )
 
     plot_indicator(toplot,carbonrev(),2017)+
-      facet_wrap(~lab,scales = 'free')
+      facet_wrap(~lab,scales = 'free',ncol = 1)
 
-    # p1 <- plot_indicator(indicator_values[indicator_values$name == userdata()$name[1],],
-    #                      carbonrev(),2017)
-    # p2 <- plot_indicator(indicator_values[indicator_values$name == userdata()$name[2],],
-    #                      carbonrev(),2017)
-    # p3 <- plot_indicator(indicator_values[indicator_values$name == userdata()$name[3],],
-    #                      carbonrev(),2017)
-    #
-    # plot_grid(p1,p2,p3,nrow = 1)
-
-  })
-
-  output$ind1 <- renderText({
-    userdata()$description[1]
-  })
-
-  output$p1 <- renderPlot({
-    toplot <- indicator_values[indicator_values$name == userdata()$name[1],]
-    plot_indicator(toplot,carbonrev(),2017)
-  })
-
-  output$ind2 <- renderText({
-    userdata()$description[2]
-  })
-  output$p2 <- renderPlot({
-    toplot <- indicator_values[indicator_values$name == userdata()$name[2],]
-    plot_indicator(toplot,carbonrev(),2017)
-  })
-
-
-  output$ind3 <- renderText({
-    userdata()$description[3]
-  })
-  output$p3 <- renderPlot({
-    toplot <- indicator_values[indicator_values$name == userdata()$name[3],]
-    plot_indicator(toplot,carbonrev(),2017)
   })
 
   output$resultsTab <- renderTable({
