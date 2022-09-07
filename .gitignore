@@ -2,3 +2,4 @@
 .Rhistory
 .Rproj.user
 inst/rmd/*.html
+inst/shiny/carpentr/rsconnect
