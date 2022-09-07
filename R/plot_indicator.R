@@ -25,9 +25,9 @@ plot_indicator <- function(indicator_data, revenue, revenue_year)
                              label = c('','Potential spend with carbon revenue'))
 p <- ggplot(indicator_data,aes(x = year, y = value))+
   geom_line()+
-  geom_line(data = revenue_data,aes(x = year, y = value),lty = 2,col = 'darkorange')+
+  geom_line(data = revenue_data,aes(x = year, y = value),lty = 2,col = '#cd2973')+
   geom_text(data = revenue_data,aes(x = year, y = value,label = label),
-            hjust = 1.1,,col = 'darkorange')+
+            hjust = 1.1,,col = '#cd2973')+
   theme_minimal(base_size = 16)+
   labs(x = 'Year',y = 'Value (million USD)')
   scale_y_continuous(limits = c(min(indicator_data$value),max(indicator_data$value)+revenue))
