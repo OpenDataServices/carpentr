@@ -18,14 +18,31 @@
 plot_indicator <- function(indicator_data, revenue, revenue_year)
 {
 
-  revenue_data <- data.frame(year = c(revenue_year-1,revenue_year),
-                             value = c(filter(indicator_data,year == revenue_year-1) %>%
-                                         pull(value),
-                                       revenue+filter(indicator_data,year == revenue_year) %>%
-                               pull(value)),
-                             label = c('','Potential value with carbon revenue')) %>%
-    filter(!is.na(value)) %>%
-    mutate(year = as.Date(paste0(year,'-01-01')))
+
+  if('lab' %in% colnames(indicator_data))
+  {
+    nlabs <- length(unique(indicator_data$lab))
+
+    revenue_data <- data.frame(year = rep(c(revenue_year-1,revenue_year),each = nlabs),
+                               value = c(filter(indicator_data,year == revenue_year-1) %>%
+                                           pull(value),
+                                         revenue+filter(indicator_data,year == revenue_year) %>%
+                                           pull(value)),
+                               lab = rep(unique(indicator_data$lab),2)) %>%
+      filter(!is.na(value)) %>%
+      mutate(year = as.Date(paste0(year,'-01-01')))
+  } else
+  {
+    revenue_data <- data.frame(year = c(revenue_year-1,revenue_year),
+                               value = c(filter(indicator_data,year == revenue_year-1) %>%
+                                           pull(value),
+                                         revenue+filter(indicator_data,year == revenue_year) %>%
+                                           pull(value)),
+                               label = c('','Potential value with carbon revenue')) %>%
+      filter(!is.na(value)) %>%
+      mutate(year = as.Date(paste0(year,'-01-01')))
+  }
+
 
   indicator_data <- indicator_data %>%
     filter(!is.na(value)) %>%
@@ -34,11 +51,9 @@ plot_indicator <- function(indicator_data, revenue, revenue_year)
 p <- ggplot(indicator_data,aes(x = year, y = value))+
   geom_line()+
   geom_line(data = revenue_data,aes(x = year, y = value),lty = 2,col = '#cd2973')+
-  geom_text(data = revenue_data,aes(x = year, y = value,label = label),
-            hjust = 1.1,col = '#cd2973',size = 6)+
-  theme_minimal(base_size = 16)+
+  theme_minimal(base_size = 12)+
   theme(panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank())+
-  labs(x = 'Year',y = 'Value (million USD)')
+  labs(x = '',y = 'Value (million USD)')
 return(p)
 }
