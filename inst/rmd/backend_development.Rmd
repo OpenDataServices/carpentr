@@ -55,50 +55,6 @@ eiti_oilgas_revenue("SN",2017,25)/1e06
 ```{r world_bank_read}
 world_bank_raw <- read_csv('../../data-raw/world_bank_raw.csv',skip = 3)
 ```
-Create indicator list
-
-```{r create_indicator_list}
-# world_bank_raw %>%
-#   filter(str_detect(`Indicator Name`,"expenditure|revenue"),
-#          !is.na(`2017`)) %>%
-#   select(`Indicator Name`,`Indicator Code`,`2017`) %>%
-#   view()
-
-initial_indicator_set <- c(
-  'GC.TAX.TOTL.GD.ZS',
-  'MS.MIL.XPND.CD',
-  'NY.ADJ.AEDU.CD',
-  'SH.XPD.CHEX.PC.CD',
-  'ST.INT.XPND.CD',
-  'NE.CON.GOVT.CD'
-)
-
-indicators <- filter(world_bank_raw,`Indicator Code` %in% initial_indicator_set) %>%
-  select(code = `Indicator Code`,
-         name = `Indicator Name`) %>%
-  mutate(name = str_remove_all(name,','))
-
-write_csv(indicators,'../../data-raw/indicators.csv')
-
-```
-
-Create question list
-
-```{r create_question_list}
-name <- c(
-  "I believe that global warming is a threat to society",
-  "I believe that carbon pricing is good for my local economy",
-  "I trust my government to spend money generated from carbon taxes on local infrastructure"
-)
-
-code <- paste0('Q',c(1:length(name)))
-
-questions <- tibble(code,name)
-
-write_csv(questions,'../../data-raw/questions.csv')
-
-
-```
 
 
 ```{r indicator_questions_template}
