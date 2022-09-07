@@ -46,7 +46,7 @@ get_wb_indicators <- function(years,data_dir = 'data-raw')
 
     pop_long <- pivot_longer(pop_wide,everything(),names_to = 'year',names_repair = "minimal",values_to = 'pop') %>%
       mutate(year = as.numeric(year))
-    gdp_long <- pivot_longer(pop_wide,everything(),names_to = 'year',,names_repair = "minimal",values_to = 'gdp') %>%
+    gdp_long <- pivot_longer(gdp_wide,everything(),names_to = 'year',names_repair = "minimal",values_to = 'gdp') %>%
       mutate(year = as.numeric(year))
 
   } else{

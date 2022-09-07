@@ -28,21 +28,21 @@ ui <- fluidPage(title = "Carbon pricing and the energy transition",
                                  label = h5(qs[1],style = "color:#044278"),
                                  min = 1,
                                  max = 9,
-                                 value = 1,
+                                 value = 5,
                                  width = '100%'
                      ),
                      sliderInput(inputId = 'q2',
                                  label = h5(qs[2],style = "color:#044278"),
                                  min = 1,
                                  max = 9,
-                                 value = 1,
+                                 value = 5,
                                  width = '100%'
                      ),
                      sliderInput(inputId = 'q3',
                                  label = h5(qs[3],style = "color:#044278"),
                                  min = 1,
                                  max = 9,
-                                 value = 1,
+                                 value = 5,
                                  width = '100%'
                      ),
                      br(),
@@ -122,7 +122,7 @@ server <- function(input, output, session) {
     })
 
     output$ind2 <- renderText({
-        userdata()$Indicator[2]
+        userdata()$description[2]
     })
     output$p2 <- renderPlot({
         toplot <- indicator_values[indicator_values$name == userdata()$name[2],]
@@ -131,7 +131,8 @@ server <- function(input, output, session) {
 
 
     output$ind3 <- renderText({
-        userdata()$Indicator[2]   })
+        userdata()$description[3]
+      })
     output$p3 <- renderPlot({
         toplot <- indicator_values[indicator_values$name == userdata()$name[3],]
         plot_indicator(toplot,rev(),2017)
