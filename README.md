@@ -19,6 +19,13 @@ A shiny app is located in `inst/shiny/carpentr`, and can be edited from within t
 shiny::runApp('inst/shiny/carpentr')
 ```
 
+To deploy on shinyapps.io (assuming you have permissions), run:
+
+```
+devtools::install_github('opendataservices/carpentr@main')
+rsconnect::deployApp('inst/shiny/carpentr',account = 'opendataservices')
+```
+
 ## Back end development
 
 R functions are located in the `R` directory, and can be run and tested within the R markdown file `inst/rmd/backend_development.Rmd`
