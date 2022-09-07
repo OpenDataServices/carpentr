@@ -22,7 +22,7 @@ ui <- fluidPage(title = "Carbon pricing and the energy transition",
         br(),
         tabsetPanel(
             id = "inTabset",
-            tabPanel(title = "1. Fill in questionnaire",
+            tabPanel(title = h4("1. Fill in questionnaire"),
                      value = 'p1',
                      br(),
                      p("On a scale from 1-9, where 1 is 'strongly disagree' and 9 is 'strongly agree', please answer the following:"),
@@ -60,31 +60,32 @@ ui <- fluidPage(title = "Carbon pricing and the energy transition",
                      br(),
                      actionButton('jumpToResults', 'See results')
             ),
-            tabPanel(title = "2. View results",
+            tabPanel(title = h4("2. View results"),
                      value = 'p2',
                      br(),
                      h4(htmlOutput("carbonpricetxt")),
                      br(),
-                     h4("Based on your responses, this carbon pricing data could be used for:"),
-                     h5(htmlOutput("ind1")),
+                     h4(htmlOutput("ind1")),
                      plotOutput("p1"),
-                     h5(htmlOutput("ind2")),
+                     br(),
+                     h4(htmlOutput("ind2")),
                      plotOutput("p2"),
-                     h5(htmlOutput("ind3")),
+                     br(),
+                     h4(htmlOutput("ind3")),
                      plotOutput("p3"),
                      br()
             ),
-            tabPanel(title = "3. Share",
+            tabPanel(title = h4("3. Share"),
                      value = 'p3',
                      h5('Your indicators'),
                      br(),
                      tableOutput('resultsTab'),
                      downloadButton('downloadData', 'Download data')
                      ),
-            tabPanel(title = "About",
+            tabPanel(title = h4("4. About"),
                      value = 'p4',
                      h5("About this app"),
-                     HTML("<p>This app is a prototype and estimates of carbon revenue should be considered crude estimates at best. Source code and information about data sources is available on <a  href = 'https://github.com/OpenDataServices/carpentr'>Github</a>.</p>"),
+                     HTML("<p>This app is a prototype and estimates of carbon revenue should be considered crude estimates at best. Source code and information about data sources is available on <a  href = 'https://github.com/OpenDataServices/carpentr'>Github</a>. where you can also report issues or problems.</p>"),
                      HTML("<p>Developed by <a href = 'https://opendataservices.coop/'>Open Data Services</a>, as part of the <a href = 'https://eiti.org/events/datathon-innovative-solutions-data-driven-energy-transition'>EITI Datathon 2022</a>.</p>")
                      )
         )
@@ -104,13 +105,13 @@ server <- function(input, output, session) {
         sum()})
 
     output$carbonpricetxt <- renderText({
-        paste0("Based on EITI data from Senegal in 2017, there would be <span style = 'color:#cd2973'>$",
+        paste0("<span style = 'color:#044278'>There could have been </span><span style = 'color:#cd2973'>$",
                carbonrev(),
-               " million USD</span> generated from carbon pricing at your selected price. This is <span style = 'color:#cd2973'>",
+               " million USD</span><span style = 'color:#044278'> generated from carbon pricing in Senegal in 2017. This is </span><span style = 'color:#cd2973'>",
                ifelse(carbonrev()<oilgasrev(),
-                      paste0(round(carbonrev()/oilgasrev()*100), '%</span> of'),
-                      paste0('$',carbonrev() - oilgasrev(),' million more</span> than')),
-               " the entire government revenue generated from the extractives industries.")
+                      paste0(round(carbonrev()/oilgasrev()*100), "%</span><span style = 'color:#044278'> of"),
+                      paste0('$',carbonrev() - oilgasrev()," million more</span><span style = 'color:#044278'> than")),
+               " the entire government revenue generated from the extractives industries. This carbon pricing revenue could have been used for...</span>")
     })
 
     dist <- reactive({

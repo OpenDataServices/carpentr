@@ -35,7 +35,7 @@ p <- ggplot(indicator_data,aes(x = year, y = value))+
   geom_line()+
   geom_line(data = revenue_data,aes(x = year, y = value),lty = 2,col = '#cd2973')+
   geom_text(data = revenue_data,aes(x = year, y = value,label = label),
-            hjust = 1.1,col = '#cd2973')+
+            hjust = 1.1,col = '#cd2973',size = 6)+
   theme_minimal(base_size = 16)+
   theme(panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank())+
