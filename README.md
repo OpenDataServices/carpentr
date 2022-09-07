@@ -13,10 +13,10 @@ library(carpentr)
 
 ## Front end development
 
-A shiny app is located in `inst/shiny/shinycarpentr`, and can be edited from within there. To run the app, run:
+A shiny app is located in `inst/shiny/carpentr`, and can be edited from within there. To run the app, run:
 
 ```
-shinycarpentr()
+shiny::runApp('inst/shiny/carpentr')
 ```
 
 ## Back end development

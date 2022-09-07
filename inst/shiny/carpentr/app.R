@@ -12,7 +12,7 @@ indicator_raw <- read_csv('data-raw/indicators.csv')
 qs <- colnames(indicator_survey_matrix)
 inds <- rownames(indicator_survey_matrix)
 
-ui <- fluidPage(
+ui <- fluidPage(title = "Carbon pricing and the energy transition",
     #theme = "bootstrap.css",
     titlePanel(h1("Carbon pricing and the energy transition",style = "color:#cd2973")),
     mainPanel(
