@@ -49,11 +49,15 @@ plot_indicator <- function(indicator_data, revenue, revenue_year)
     mutate(year = as.Date(paste0(year,'-01-01')))
 
 p <- ggplot(indicator_data,aes(x = year, y = value))+
-  geom_line()+
-  geom_line(data = revenue_data,aes(x = year, y = value),lty = 2,col = '#cd2973')+
+  geom_line(aes(lty = 'Without carbon pricing revenue',col = 'Without carbon pricing revenue'))+
+  geom_line(data = revenue_data,aes(x = year, y = value,lty = 'With carbon pricing revenue',col = 'With carbon pricing revenue'))+
   theme_minimal(base_size = 12)+
   theme(panel.grid.minor = element_blank(),
-        panel.grid.major.x = element_blank())+
-  labs(x = '',y = 'Value (million USD)')
+        panel.grid.major.x = element_blank(),
+        legend.title = element_blank(),
+legend.position = 'top')+
+  labs(x = '',y = 'Value (million USD)',color = 'type',linetype = 'type')+
+  scale_color_manual(values = c('#cd2973','black'))+
+  scale_linetype_manual(values = c(2,1))
 return(p)
 }
