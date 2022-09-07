@@ -51,7 +51,7 @@ plot_indicator <- function(indicator_data, revenue, revenue_year)
 p <- ggplot(indicator_data,aes(x = year, y = value))+
   geom_line(aes(lty = 'Without carbon pricing revenue',col = 'Without carbon pricing revenue'))+
   geom_line(data = revenue_data,aes(x = year, y = value,lty = 'With carbon pricing revenue',col = 'With carbon pricing revenue'))+
-  theme_minimal(base_size = 12)+
+  theme_minimal(base_size = 14)+
   theme(panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank(),
         legend.title = element_blank(),
