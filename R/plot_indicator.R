@@ -7,6 +7,7 @@
 #' @param revenue_year the year that the revenue data is calculated for
 #' @return A ggplot object
 #' @importFrom ggplot2 ggplot theme_minimal theme
+#' @importfrom dplyr %>% filter pull
 #' @export
 #'
 #' @examples
@@ -22,16 +23,22 @@ plot_indicator <- function(indicator_data, revenue, revenue_year)
                                          pull(value),
                                        revenue+filter(indicator_data,year == revenue_year) %>%
                                pull(value)),
-                             label = c('','Potential spend with carbon revenue'))
+                             label = c('','Potential value with carbon revenue')) %>%
+    filter(!is.na(value)) %>%
+    mutate(year = as.Date(paste0(year,'-01-01')))
+
+  indicator_data <- indicator_data %>%
+    filter(!is.na(value)) %>%
+    mutate(year = as.Date(paste0(year,'-01-01')))
+
 p <- ggplot(indicator_data,aes(x = year, y = value))+
   geom_line()+
   geom_line(data = revenue_data,aes(x = year, y = value),lty = 2,col = '#cd2973')+
   geom_text(data = revenue_data,aes(x = year, y = value,label = label),
-            hjust = 1.1,,col = '#cd2973')+
+            hjust = 1.1,col = '#cd2973')+
   theme_minimal(base_size = 16)+
   theme(panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank())+
   labs(x = 'Year',y = 'Value (million USD)')
-  scale_y_continuous(limits = c(min(indicator_data$value),max(indicator_data$value)+revenue))
 return(p)
 }
