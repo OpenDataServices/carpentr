@@ -66,7 +66,7 @@ ui <- fluidPage(title = "Carbon pricing and the energy transition",
                              br(),
                              h4(htmlOutput("carbonpricetxt")),
                              br(),
-                             plotOutput("plots",height = "600px"),
+                             plotOutput("plots",width = "500px",height = "600px"),
                              br()
                     ),
                     tabPanel(title = h4("3. Share"),
