@@ -101,6 +101,7 @@ server <- function(input, output, session) {
     output$ind2 <- renderText({
         inds[which(order(dist()) == 2)]
         })
+
     output$p2 <- renderPlot({
         nam <- inds[which(order(dist()) == 2)]
         toplot <- indicator_values[indicator_values$name == nam,]
