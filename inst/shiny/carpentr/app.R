@@ -101,7 +101,7 @@ server <- function(input, output, session) {
   output$carbonpricetxt <- renderText({
     paste0("<span style = 'color:#044278'>There could have been </span><span style = 'color:#cd2973'>$",
            carbonrev(),
-           " million</span><span style = 'color:#044278'> generated from carbon pricing in Senegal in 2017. This is </span><span style = 'color:#cd2973'>",
+           " million</span><span style = 'color:#044278'> generated from carbon pricing of oil and gas production in Senegal in 2017. This is </span><span style = 'color:#cd2973'>",
            ifelse(carbonrev()<oilgasrev(),
                   paste0(round(carbonrev()/oilgasrev()*100), "%</span><span style = 'color:#044278'> of"),
                   paste0('$',carbonrev() - oilgasrev()," million more</span><span style = 'color:#044278'> than")),
