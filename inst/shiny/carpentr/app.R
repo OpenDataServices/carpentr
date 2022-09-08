@@ -18,16 +18,17 @@ ui <- navbarPage("Carbon pricing and the energy transition",collapsible = TRUE,
                  id = "inTabset",
                  tags$style(HTML("
       .navbar-default .navbar-brand { display: none;}
-  ")),                 selected = "1. Fill in questionnaire",
+  ")),                 selected = "p1",
                  tabPanel("1. Fill in questionnaire",
-                          fluidPage(tags$style(type = "text/css", "a{color: #044278;}"),
+                          value = 'p1',
+                          fluidPage(align = 'center',
+                                    tags$style(type = "text/css", "a{color: #044278;}"),
                                     setSliderColor(rep('#044278',3),c(1,2,3)),
                                     #theme = "bootstrap.css",
                                     title = h4("1. Fill in questionnaire"),
-                                    value = 'p1',
-                                    h1('Carbon pricing and the energy transition',style = 'color: #009966'),
+                                    h1('Carbon pricing and the energy transition',style = 'color: #009966',align = 'left'),
                                     br(),
-                                    h4(HTML("<span style = 'color:#044278'>Putting a price on carbon helps to bring down emissions and raises money for investment. But <span style = 'color:#009966'>how much money</span> , and <span style = 'color:#009966'>what could it be spent on?</span> First, tell us what you think about carbon pricing...</span>")),
+                                    h4(align = 'left',HTML("<span style = 'color:#044278'>Putting a price on carbon helps to bring down emissions and raises money for investment. But <span style = 'color:#009966'>how much money</span> , and <span style = 'color:#009966'>what could it be spent on?</span> First, tell us what you think about global warming and carbon pricing...</span>")),
                                     br(),
                                     sliderInput(inputId = 'q1',
                                                 label = h5(qs[1]),
@@ -69,7 +70,8 @@ ui <- navbarPage("Carbon pricing and the energy transition",collapsible = TRUE,
                                     h4(htmlOutput("carbonpricetxt"),align = 'left'),
                                     br(),
                                     plotOutput("plots",width = "500px",height = "500px"),
-                                    br()
+                                    br(),
+                                    actionButton('viewQ', 'Back to questions')
                           )),
                  tabPanel("3. Share",
                           fluidPage(
@@ -155,6 +157,11 @@ server <- function(input, output, session) {
     updateTabsetPanel(session,
                       "inTabset",
                       selected = "p2")
+  })
+  observeEvent(input$viewQ, {
+    updateTabsetPanel(session,
+                      "inTabset",
+                      selected = "p1")
   })
 
   output$downloadData <- downloadHandler(
