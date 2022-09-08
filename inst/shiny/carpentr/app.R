@@ -16,9 +16,9 @@ inds <- rownames(indicator_survey_matrix)
 
 ui <- fluidPage(title = "Carbon pricing and the energy transition",
                 tags$style(type = "text/css", "a{color: #044278;}"),
-                setSliderColor(rep('#696969',3),c(1,2,3)),
+                setSliderColor(rep('#044278',3),c(1,2,3)),
                 #theme = "bootstrap.css",
-                titlePanel(h1("Carbon pricing and the energy transition",style = "color:#cd2973")),
+                titlePanel(h1("Carbon pricing and the energy transition",style = "color:#009966")),
                 mainPanel(
                   br(),
                   tabsetPanel(
@@ -66,7 +66,7 @@ ui <- fluidPage(title = "Carbon pricing and the energy transition",
                              br(),
                              h4(htmlOutput("carbonpricetxt")),
                              br(),
-                             plotOutput("plots",width = "500px",height = "600px"),
+                             plotOutput("plots",width = "500px",height = "500px"),
                              br()
                     ),
                     tabPanel(title = h4("3. Share"),
@@ -99,9 +99,9 @@ server <- function(input, output, session) {
       sum()})
 
   output$carbonpricetxt <- renderText({
-    paste0("<span style = 'color:#044278'>There could have been </span><span style = 'color:#cd2973'>$",
+    paste0("<span style = 'color:#044278'>There could have been </span><span style = 'color:#009966'>$",
            carbonrev(),
-           " million</span><span style = 'color:#044278'> generated from carbon pricing of oil and gas production in Senegal in 2017. This is </span><span style = 'color:#cd2973'>",
+           " million</span><span style = 'color:#044278'> generated from carbon pricing of oil and gas production in Senegal in 2017. This is </span><span style = 'color:#009966'>",
            ifelse(carbonrev()<oilgasrev(),
                   paste0(round(carbonrev()/oilgasrev()*100), "%</span><span style = 'color:#044278'> of"),
                   paste0('$',carbonrev() - oilgasrev()," million more</span><span style = 'color:#044278'> than")),
@@ -133,7 +133,10 @@ server <- function(input, output, session) {
       )
 
     plot_indicator(toplot,carbonrev(),2017)+
-      facet_wrap(~lab,scales = 'free',ncol = 1)
+      facet_wrap(~lab,scales = 'free',ncol = 2) +
+    theme(legend.position = c(1, 0.22),
+          legend.justification = c(1, 0),
+          legend.text = element_text(size = 15))
 
   })
 
