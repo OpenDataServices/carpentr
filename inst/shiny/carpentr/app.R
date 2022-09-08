@@ -83,7 +83,7 @@ ui <- navbarPage("Carbon pricing and the energy transition",collapsible = TRUE,
                             value = 'p3',
                             h1(align = 'left','Carbon pricing and the energy transition',style = 'color: #009966'),
                             br(),
-                            h4('Your indicators',style = 'color:#044278'),
+                            h4('Based on your answers, the indicators most relevant to you are included below.',style = 'color:#044278'),
                             br(),
                             tableOutput('resultsTab'),
                             downloadButton('downloadData', 'Download data')
@@ -113,13 +113,13 @@ server <- function(input, output, session) {
       sum()})
 
   output$carbonpricetxt <- renderText({
-    paste0("<span style = 'color:#044278'>There could have been </span><span style = 'color:#009966'>$",
+    paste0("<span style = 'color:#044278'>There could have been <span style = 'color:#009966'>$",
            carbonrev(),
-           " million</span><span style = 'color:#044278'> generated from carbon pricing of oil and gas production in Senegal in 2017. This is </span><span style = 'color:#009966'>",
+           " million</span> generated from carbon pricing of oil and gas production in Senegal in 2017. This ",
            ifelse(carbonrev()<oilgasrev(),
-                  paste0(round(carbonrev()/oilgasrev()*100), "%</span><span style = 'color:#044278'> of"),
-                  paste0('$',carbonrev() - oilgasrev()," million more</span><span style = 'color:#044278'> than")),
-           " the entire government revenue generated from the extractives industries. This carbon pricing revenue could have been used for...</span>")
+                  paste0("is equivalent to <span style = 'color:#009966'>", round(carbonrev()/oilgasrev()*100), "%</span> of"),
+                  paste0("is <span style = 'color:#009966'>$",carbonrev() - oilgasrev()," million more</span> than")),
+           " the entire government revenue generated from the extractives industries. Based on your answers, this carbon pricing revenue could have been used for...</span>")
   })
 
   dist <- reactive({
@@ -150,7 +150,9 @@ server <- function(input, output, session) {
       facet_wrap(~lab,scales = 'free',ncol = 2) +
       theme(legend.position = c(1, 0.22),
             legend.justification = c(1, 0),
-            legend.text = element_text(size = 15))
+            legend.text = element_text(size = 15),
+            strip.text = element_text(size = 13,color = '#009966'),
+            panel.spacing = unit(2, "lines"))
 
   })
 
