@@ -60,8 +60,11 @@ ui <- navbarPage("Carbon pricing and the energy transition",collapsible = TRUE,
                                                     inline = TRUE,
                                                     width = "100%"),
                                     br(),
-                                    actionButton('viewResults', 'Go to results')
-                                    ))),
+                                    ),
+                                    actionButton('viewResults', 'Go to results'),
+                                    br(),
+                                    br()
+                          )),
                  tabPanel("2. View results",
                           value = 'p2',
                           fluidPage(align = 'center',
@@ -71,7 +74,9 @@ ui <- navbarPage("Carbon pricing and the energy transition",collapsible = TRUE,
                                     br(),
                                     plotOutput("plots",width = "500px",height = "500px"),
                                     br(),
-                                    actionButton('viewQ', 'Back to questions')
+                                    actionButton('viewQ', 'Back to questions'),
+                                    br(),
+                                    br()
                           )),
                  tabPanel("3. Share",
                           fluidPage(
