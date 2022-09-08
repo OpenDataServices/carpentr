@@ -87,7 +87,9 @@ ui <- navbarPage("Carbon pricing and the energy transition",collapsible = TRUE,
                           fluidPage(
                             value = 'p4',
                             h1(align = 'left','Carbon pricing and the energy transition',style = 'color: #009966'),
+                            br(),
                             h4('About this app',style = 'color:#044278'),
+                            br(),
                             HTML("<p>This app is a prototype and estimates of carbon revenue should be considered crude estimates at best. Source code and information about data sources is available on <a  href = 'https://github.com/OpenDataServices/carpentr'>Github</a>, where you can also report issues.</p>"),
                             HTML("<p>Developed by <a href = 'https://opendataservices.coop/'>Open Data Services</a>, as part of the <a href = 'https://eiti.org/events/datathon-innovative-solutions-data-driven-energy-transition'>EITI Datathon 2022</a>.</p>")
                           )))
