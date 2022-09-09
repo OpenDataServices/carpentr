@@ -1,6 +1,6 @@
 # Carbon pricing for the energy transition (prototype)
 
-This repository contains an R code and a shiny app for understanding the impacts of carbon pricing for revenue generation and spending. It is a work in progress. The tools uses [EITI production and revenue data](https://eiti.org/open-data) to estimate carbon revenue associated with oil and gas production in a given country and year. It then combines this with World Bank [world development indicator data](https://databank.worldbank.org/source/world-development-indicators) to generate a set of user-specific indicators suggesting how revenue from carbon pricing could be spent.
+This repository contains R code and a shiny app for understanding the impacts of carbon pricing for revenue generation and spending. It is a work in progress. The tools uses [EITI production and revenue data](https://eiti.org/open-data) to estimate carbon revenue associated with oil and gas production in a given country and year. It then combines this with World Bank [world development indicator data](https://databank.worldbank.org/source/world-development-indicators) to generate a set of user-specific indicators suggesting how revenue from carbon pricing could be spent.
 
 This work has been produced as part of the [EITI Datathon 2022](https://eiti.org/events/datathon-innovative-solutions-data-driven-energy-transition).
 
